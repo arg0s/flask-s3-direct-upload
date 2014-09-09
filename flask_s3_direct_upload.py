@@ -29,7 +29,7 @@ def conf(key):
 def verify_config(l, d):
   # Shortcut for checking a list of keys against the app config dictionary
   # to see if all required parameters have been set in the app config
-  k = d.keys()
+  k = list(d.keys())
   m = list(set(l)-set(k))
   return len(m)>0, m
 

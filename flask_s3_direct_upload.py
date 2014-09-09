@@ -5,7 +5,11 @@ import pdb
 import os
 from base64 import b64encode
 import hmac
-import sha
+try:
+    import hashlib
+except ImportError:
+    import md5
+    import sha
 from uuid import uuid4
 import arrow
 

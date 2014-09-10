@@ -7,9 +7,11 @@ from base64 import b64encode
 import hmac
 try:
     import hashlib
+    sha_constructor = hashlib.sha1
 except ImportError:
     import md5
     import sha
+    sha_constructor = sha
 from uuid import uuid4
 import arrow
 
@@ -52,10 +54,10 @@ class S3UploadPolicy(object):
                   [ "content-length-range", 1, 5242880 ]
               ]
           }
-          return b64encode(dumps(policy_object).replace('\n', '').replace('\r', '')) , sExpiry
+          return b64encode(dumps(policy_object).replace('\n', '').replace('\r', '').encode('utf-8')) , sExpiry
 
       def sign_policy(policy):
-          return b64encode(hmac.new(conf('S3_UPLOAD_SECRET_KEY'), policy, sha).digest())
+          return b64encode(hmac.new(conf('S3_UPLOAD_SECRET_KEY').encode('utf-8'), policy, sha_constructor).digest())
 
       policy , sExpiry = make_policy()
       return jsonify({
